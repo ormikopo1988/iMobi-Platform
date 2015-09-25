@@ -1,0 +1,747 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>i-Mobi Volos</title>
+		<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="css/component.css">
+		<link rel="stylesheet" href="css/demo.css">
+		<link rel="stylesheet" href="css/normalize.css">
+		<link rel="stylesheet" href="css/introjs.css">
+		<link rel="stylesheet" href="css/introjs-rtl.css">
+		<link rel="stylesheet" href="css/home.css">
+		<link rel="stylesheet" href="css/animations.css">
+		<link rel="stylesheet" href="css/text_hover.css">
+		<link rel="stylesheet" href="css/text_hover_2.css">
+		<link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+		<link href="plugins/time_picker/jquery.datetimepicker.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/jAlert-v3.css">
+		<script src="js/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script src="js/jquery/jquery.easing.1.3.min.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBvJFVY3P3bwTflFzlBIU6pdPQjTqGpsNQ&libraries=places&sensor=true&language=el"></script>
+		<script src="js/jAlert-v3.min.js"></script>
+		<script src="js/jAlert-functions.min.js"></script>
+		<script src="plugins/time_picker/jquery.datetimepicker.js"></script>
+		
+		<!-- SCROLLING BAR-->
+    	<script src="plugins/scrolling_bar/jquery.nicescroll.js"></script>
+		
+	</head
+	<body>
+
+		<link href='http://fonts.googleapis.com/css?family=Raleway:400,200' rel='stylesheet' type='text/css'> 
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+		<div id="transparent_div"> </div>
+		<div id="line_options_div"> 
+
+			<a id="reverse_route_btn" > ΑΝΤΙΣΤΡΟΦΗ ΔΙΑΔΡΟΜΗ </a>
+		</div>
+		<div id="directions_div">
+			<div id="directions_div_col_1"> 
+				<div class="row">
+					<div class="col_1">
+						<img src="img/dd-start.png"/>
+					</div>
+					<div id ="source_main_content">
+						<div class="col_2"> 
+							<div id="source_address_div">
+								<span id="source_point"></span>	<!-- helper tag-->
+								<a href="#" class="address">	<!-- address long_lat (will be added later)-->
+									<span id="source_address"></span> 	<!-- address text-->
+								</a>
+							</div>
+						</div>
+						<div class="col_3"> 
+							<a id="remove_source">
+								<img src="img/remove_icon.png" height="20" width="20" class="directions_div_btn">
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col_1">
+						<img src="img/dd-end.png"/>
+					</div>
+					<div id ="destination_main_content">
+						<div class="col_2"> 
+							<div id="destination_address_div">
+								<span id="destination_point"></span> <!-- helper tag-->
+								<a href="#" class="address">	<!-- address long_lat (will be added later)-->
+									<span id="destination_address"></span>	<!-- address text-->
+								</a> 
+							</div>
+						</div>
+						<div class="col_3"> 
+							<a id="remove_destination">
+								<img src="img/remove_icon.png" height="20" width="20" class="directions_div_btn">
+							</a>
+						</div>
+					</div>
+				</div>
+			</div> 
+			<div id="directions_div_col_2"> 
+				<a href="javascript:void(0);" id="change_addresses_btn" onclick="change_addresses()">
+					<img src="img/replace_icon.png" height="20" width="20" class="directions_div_btn">
+				</a>
+			</div> 
+		</div>
+		<!-- <div id="map_footer"> -->
+			<div id="map-canvas"></div>
+			<div id="footer">
+				<div id="social_media">
+	            	<a target="_blank" class="social_media_icon" href="https://www.facebook.com/pages/I-mobi-volos-project/275589999260275?fref=ts">
+	            		<img src="img/facebook_icon.png"/> 
+	            	</a>
+	            	<a target="_blank" class="social_media_icon" href="https://twitter.com/imobivolos">
+	            		<img height="15" width="15" src="img/twitter_icon.png"/> 
+	            	</a>
+
+	            </div>
+         		<div id="copyright">
+	            	<span id="copyright_symbol">&copy;</span> 
+	            	2015 i-Mobi Volos Project
+	            </div>
+	            <div id="language">
+	            	<a href="#" class="language" id="english">EN</a> | <a href="#" class="language" id="greek">GR</a>
+	            </div>
+	            
+			</div> 
+		<!-- </div> --> 
+		<div id="menu_hidden_div"></div> 
+		<div id="ajax_loader" >
+			<img src='img/ajax-loader.gif' width="94" height="94" /><br>
+			<span>Παρακαλώ περιμένετε...</span>
+		</div>
+		<div id="menu_other_links">
+			<a class="text_1" href="routes_fares/gr/Dromologia.htm" target="blank">
+				<div class="menu_links_element">
+					Δρομολόγια
+	            </div>
+	        </a>
+	        <a class="text_1" href="routes_fares/gr/Komistra-1.htm" target="blank">
+	            <div class="menu_links_element">
+	                Κόμιστρα
+	            </div>
+	        </a>
+	         <a class="text_1" href="javascript:void(0);" onclick="show_symbols()">
+				<div class="menu_links_element">
+					Επεξήγηση συμβόλων
+	            </div>
+	         </a>
+	          <a class="text_1" href="https://docs.google.com/forms/d/1xZmXwt0-GexuKknkDXwbaMWox0jzCxjxniYIeiQvTB0/viewform" target="blank">
+	            <div class="menu_links_element">
+					Συμμετοχή σε έρευνα μετακινούμενων
+	            </div>
+	         </a>
+        </div>
+		<div data-step="1" data-intro="Εδώ είναι το κυρίως μενου" id="container" class="container">
+			<ul id="gn-menu" class="gn-menu-main">
+				<li class="gn-trigger" data-step="2" data-intro="Πάτα εδώ για να αρχίσεις τη διαδικασία υπολογισμού ">
+					<a class="gn-icon-menu menu_open_btn"><span>Σχεδιασμος μετακινησης</span></a>
+					<nav class="gn-menu-wrapper">	<!-- all the div starts here-->
+						<div class="gn-scroller">
+							<ul class="gn-menu">
+							<div data-step="3" data-intro="BHMA 1" id="step1_div">
+									<div id="from_options_div">
+										<center><h3 class="greek"><u>BHMA 1</u></h3></center>
+										<span data-step="4" data-intro="Επιλέγεις πρώτα αφετηρία με έναν από τους τρεις τρόπους">
+											<center><h4> ΑΝΑΧΩΡΗΣΗ ΑΠΟ: </h4></center>
+											<center><h3 class="english"> STEP 1 </h3> </center>
+											<ul class="gn-submenu">
+												<div class="choose_choice_options">
+													<center>
+														<select id="show_step_content_1" onchange="show_step_content_1(this.value)"> 
+															<option value="default"> -Διάλεξε τρόπο επιλογής αφετηρίας- </option>
+															<option id="op1" value="choose_by_point_1"> A. Επιλογή σημείου ενδιαφέροντος </option>
+															<option value="choose_by_address_1"> B. Εισαγωγή διεύθυνσης </option>
+															<option value="choose_by_right_click_1"> Γ. Δεξί κλίκ </option>
+														</select> 
+													</center>
+												</div>
+												<br>
+												<div class="step step1" id="choose_by_point_1">
+													<center>
+														<span>
+															
+															<div id="all_options_btn_1"> 
+																<span class="menu_selected_item_from">-Διάλεξε σημείο-</span>
+																<img class="icon_arrow" id="icon_arrow_1" src="img/down_arrow.png" height="15" width="15">
+															</div>
+															<div id="all_options_content_1">
+																<a class="menu_item_from" id="default">-Διάλεξε σημείο-</a>
+																<a class="menu_item_from" id="sports"> Αθλητικές εγκαταστάσεις</a>
+																<a class="menu_item_from" id="public"> Δημοτικές υπηρεσίες</a>  
+																<a id="education_btn" class="item_with_options"> Εκπαίδευση <img class="icon_arrow" src="img/down_arrow.png" height="15" width="15"></a>
+																<div class="all_options">
+																	<div class="menu_item_from" id="grade1">
+																		<span > Πρωτοβάθμια εκπαίδευση </span>
+																	</div>
+																	<div class="menu_item_from" id="grade2">
+																		<span > Δευτεροβάθμια εκπαίδευση </span>
+																	</div>
+																	<div class="menu_item_from" id="grade3">
+																		<span > Τριτοβάθμια εκπαίδευση </span>
+																	</div>
+																	<div class="menu_item_from" id="other">
+																		<span > Άλλες σχολές </span>
+																	</div>
+																</div> 
+																<a class="menu_item_from" id="church"> Θρησκευτικοί χώροι</a> 
+																<a class="menu_item_from" id="culture"> Πολιτιστικοί Χώροι</a> 
+																<a class="menu_item_from" id="hotel"> Ξενοδοχεία</a> 
+																<a id="mmm_btn" class="item_with_options"> Στάσεις λεωφορείων  <img class="" src="img/down_arrow.png" height="15" width="15"></a>
+																<div class="all_options">
+																	<div class="menu_item_2_from" id="all_routes">
+																		<span> Δείξε όλες τις στάσεις </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route1">
+																		<span > Νο1: Άναυρος - Νέα Ιωνία </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route2">
+																		<span > Νο2: Αμπελόκηποι </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route3">
+																		<span > Νο3: Νέα Δημητριάδα - Νέα Ιωνία </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route4">
+																		<span > Νο4: Αηδονοφωλιές </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route4-1">
+																		<span > Νο4: Κατηχώρι - Σταγιάτες </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route5">
+																		<span > Νο5: Τέρμα Λεχώνια </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route55">
+																		<span > Νο5: Πλατανίδια </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route6">
+																		<span > Νο6: Αλυκές </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route7">
+																		<span > Νο7: Άλλη Μεριά </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route8">
+																		<span > Νο8: Δημίνι </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route9">
+																		<span > Νο9: Λιμάνι - Χιλιαδού - Αλιβέρι </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route10">
+																		<span > Νο10: Μελισσάτικα </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route11">
+																		<span > Νο11: Νέο Κοιμητήριο </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route15">
+																		<span > Νο15: Άναυρος - Γιάννη Δήμου - Παλαιά </span>
+																	</div>
+																	<div class="menu_item_2_from" id="route49">
+																		<span > Νο49: Αγία Παρασκευή </span>
+																	</div>
+
+																</div> 
+																<a class="menu_item_from" id="taxi"> Πιάτσες ταξί</a>
+																<a class="menu_item_from" id="terminal"> Τερματικοί σταθμοί</a> 
+																<a class="menu_item_from" id="car"> Ενοικιάσεις αυτοκινήτων</a>
+																<a class="menu_item_from" id="parking"> Χώροι στάθμευσης</a>   
+																<a class="menu_item_from" id="health"> Υγεία - Πρόνοια</a>	
+															</div>
+														
+														</span>
+													</center>
+												</div>
+												<div class="step step1" id="choose_by_address_1">
+													<center>
+														<ul>
+															<input id="search_by_location_1" placeholder="Διεύθυνση..." type="text"></input>
+															<button id="search_location_btn_1"><img src="img/search_icon.png" height="18.5" width="18.5"></button>
+														</ul>
+														<span>(π.χ. "Γαλλίας 57, Βόλος, Ελλάδα")</span>
+													</center>
+												</div>
+												<div class="step step1" id="choose_by_right_click_1">
+													<div>
+														<center><span class="greek"><b>Δεξί κλίκ στο χάρτη για δήλωση αφετηρίας</b></span></center>
+													</div>
+												</div>
+											</ul>
+										</span>
+									</div>
+									<!-- END FROM DIV-->
+									<div id="to_options_div">
+										<span data-step="5" data-intro="Στη συνέχεια επιλέγεις προορισμό με έναν από τους τρεις τρόπους">
+											<center><h4 class="greek">ΑΦΙΞΗ ΣΕ:</h4></center>
+											<div class="choose_choice_options">
+												<center>
+													<select id="show_step_content_2" onchange="show_step_content_2(this.value)"> 
+														<option value="default"> -Διάλεξε τρόπο επιλογής προορισμού- </option>
+														<option value="choose_by_point_2"> A. Επιλογή σημείου ενδιαφέροντος </option>
+														<option value="choose_by_address_2"> B. Εισαγωγή διεύθυνσης </option>
+														<option value="choose_by_right_click_2"> Γ. Δεξί κλίκ </option>
+													</select> 
+												</center>
+											</div><br>
+											<div class="step step2" id="choose_by_point_2">
+												<center>
+													<div id="all_options_btn_2"> 
+														<span class="menu_selected_item_to">-Διάλεξε σημείο-</span>
+														<img class="icon_arrow" id="icon_arrow_2" src="img/down_arrow.png" height="15" width="15">
+													</div>
+													<div id="all_options_content_2">
+														<a class="menu_item_to" id="default">-Διάλεξε σημείο-</a>
+														<a class="menu_item_to" id="sports"> Αθλητικές εγκαταστάσεις</a>
+														<a class="menu_item_to" id="public"> Δημοτικές υπηρεσίες</a>  
+														<a class="item_with_options"> Εκπαίδευση <img src="img/down_arrow.png" class="icon_arrow" height="15" width="15"></a>
+														<div class="all_options">
+															<div class="menu_item_to" id="grade1">
+																<span > Πρωτοβάθμια εκπαίδευση </span>
+															</div>
+															<div class="menu_item_to" id="grade2">
+																<span > Δευτεροβάθμια εκπαίδευση </span>
+															</div>
+															<div class="menu_item_to" id="grade3">
+																<span > Τριτοβάθμια εκπαίδευση </span>
+															</div>
+															<div class="menu_item_to" id="other">
+																<span > Άλλες σχολές </span>
+															</div>
+														</div> 
+														<a class="menu_item_to" id="church"> Θρησκευτικοί χώροι</a> 
+														<a class="menu_item_to" id="culture"> Πολιτιστικοί Χώροι</a> 
+														<a class="menu_item_to" id="hotel"> Ξενοδοχεία</a> 
+														<a class="item_with_options"> Στάσεις λεωφορείων <img src="img/down_arrow.png" class="" height="15" width="15"></a>
+														<div class="all_options">
+															<div class="menu_item_2_to" id="all_routes">
+																<span> Δείξε όλες τις στάσεις </span>
+															</div>
+															<div class="menu_item_2_to" id="route1">
+																<span > Νο1: Άναυρος - Νέα Ιωνία </span>
+															</div>
+															<div class="menu_item_2_to" id="route2">
+																<span > Νο2: Αμπελόκηποι </span>
+															</div>
+															<div class="menu_item_2_to" id="route3">
+																<span > Νο3: Νέα Δημητριάδα - Νέα Ιωνία </span>
+															</div>
+															<div class="menu_item_2_to" id="route4">
+																<span > Νο4: Αηδονοφωλιές </span>
+															</div>
+															<div class="menu_item_2_to" id="route4-1">
+																<span > Νο4: Κατηχώρι - Σταγιάτες </span>
+															</div>
+															<div class="menu_item_2_to" id="route5">
+																<span > Νο5: Τέρμα Λεχώνια </span>
+															</div>
+															<div class="menu_item_2_to" id="route55">
+																<span > Νο5: Πλατανίδια </span>
+															</div>
+															<div class="menu_item_2_to" id="route6">
+																<span > Νο6: Αλυκές </span>
+															</div>
+															<div class="menu_item_2_to" id="route7">
+																<span > Νο7: Άλλη Μεριά </span>
+															</div>
+															<div class="menu_item_2_to" id="route8">
+																<span > Νο8: Δημίνι </span>
+															</div>
+															<div class="menu_item_2_to" id="route9">
+																<span > Νο9: Λιμάνι - Χιλιαδού - Αλιβέρι </span>
+															</div>
+															<div class="menu_item_2_to" id="route10">
+																<span > Νο10: Μελισσάτικα </span>
+															</div>
+															<div class="menu_item_2_to" id="route11">
+																<span > Νο11: Νέο Κοιμητήριο </span>
+															</div>
+															<div class="menu_item_2_to" id="route15">
+																<span > Νο15: Άναυρος - Γιάννη Δήμου - Παλαιά </span>
+															</div>
+															<div class="menu_item_2_to" id="route49">
+																<span > Νο49: Αγία Παρασκευή </span>
+															</div>
+														</div> 
+														<a class="menu_item_to" id="taxi"> Πιάτσες ταξί</a>
+														<a class="menu_item_to" id="terminal"> Τερματικοί σταθμοί</a> 
+														<a class="menu_item_to" id="car"> Ενοικιάσεις αυτοκινήτων</a>
+														<a class="menu_item_to" id="parking"> Χώροι στάθμευσης</a>   
+														<a class="menu_item_to" id="health"> Υγεία - Πρόνοια</a>
+													</div>
+												
+												</center>
+											</div>
+											<div class="step step2" id="choose_by_address_2">
+												<center>
+													<ul>
+														<input id="search_by_location_2" placeholder="Διεύθυνση..." type="text"></input>
+														<button id="search_location_btn_2">
+															<div class="">
+																<img src="img/search_icon.png" height="18.5" width="18.5">
+															</div>
+														</button>
+													</ul>
+													<span>(π.χ. "Γκλαβάνη 37, Βόλος, Ελλάδα")</span>
+												</center>
+											</div>
+									
+											<div class="step step2" id="choose_by_right_click_2">
+												<center><span class="greek"><b>Δεξί κλίκ στο χάρτη για δήλωση προορισμού</b></span></center>
+											</div> 
+										</span>
+									</div>	<!-- END to DIV-->
+							</div>		<!-- END to step1-->
+							<div data-step="6" data-intro="BHMA 2" id="step2_div">
+								<div class="back_btn_icon_text"> 
+									<div >
+										<!-- <span class="back_btn_text"> Πίσω</span> -->
+										<img class="back_btn_icon" id="step_2_go_back" src="img/back_icon.png" height="20" width="20"/>
+										<h3 class="back_btn_text"><u>BHMA 2</u></h3>  
+									</div>
+								</div>
+								<span>
+									<center> <h4><b>ΕΠΙΛΟΓΕΣ ΜΕΤΑΚΙΝΗΣΗΣ:</b></h4></center>
+									<div>
+										<span class="gn-icon gn-icon-cog"><b>Τρόπος μετακίνησης</b></span>
+									</div><br>
+									<center>
+										<ul data-step="7" data-intro="Επιλέγεις τρόπο μετακίνησης">
+											<select id="mode_1" onchange="show_hide_route_time_div(this.value)"> 
+												onchange="show_step_content_1(this.value)"
+												<option  value="default">-Παρακαλώ επιλέξτε-</option>
+												<option  value="DRIVING">Αυτοκίνητο</option>
+												<option  value="TRANSIT">ΜΜΜ</option>
+												<option  value="WALKING">Περπάτημα</option>
+												<option value="BICYCLING">Ποδήλατο</option>
+												<option value="ANYTHING">Οποιοδήποτε</option>
+												<!-- <option  value="SUM">Συνδυασμός</option> -->
+											</select>
+											
+										</ul>
+									</center>										
+									<br>
+									<div>
+										<span class="gn-icon gn-icon-cog"><b>Βελτιστοποίηση βάσει</b></span>
+									</div><br>
+									<center>
+										<ul data-step="8" data-intro="Επιλέγεις κριτήριο βελτιστοποίησης">
+											<select id="mode_2"> <!-- onchange="calcRoute(); -->
+												<option value="default">-Παρακαλώ επιλέξτε-</option>
+												<option value="speed">Συντομότερη</option>
+												<option value="money">Οικονομικότερη</option>
+												<option value="co2">Περιβαλλοντικά φιλική</option>
+												
+												<!--<option value="number_of_tr">Αριθμός μεταβιβάσεων</option>-->
+											</select>
+										</ul>
+									</center><br>
+									<div id="route_time_div">
+										<span class="gn-icon gn-icon-cog"><b>Ώρα έναρξης διαδρομής</b></span><br><br>
+										<div class="">
+											<center>
+												<input type="text" id="route_time" size="15" placeholder="Επίλεξε ώρα..."/>
+											</center>
+										</div>
+									</div><br>
+								</span>
+								<center>
+									<button data-step="9" data-intro="Πατάς το κουμπί Υπολόγισε και στο Βήμα 3 σου επιστρέφονται τα αποτελέσματα με τις οδηγίες της διαδρομής σου" id="calculate_min_route" class="button_2" type="button">Υπολόγισε</button>
+								</center>
+							</div>
+							<div id="step3_div"> 
+								<div class="back_btn_icon_text"> 
+									<div>
+										<img class="back_btn_icon" id="step_3_go_back" src="img/back_icon.png" height="20" width="20"/>
+										<h3 class="back_btn_text"><u>BHMA 3</u></h3>  
+									</div>
+								</div>
+								<div class="route_final_options"> 
+									
+									<div class="route_final_option"> 
+										<a href="#" class="roll" id="step_3_main_results">
+											<span data-title="ΔΙΑΔΡΟΜΕΣ"> ΔΙΑΔΡΟΜΕΣ </span>
+										</a>
+										<!-- <span class="hover_link " id="step_3_main_results">ΑΠΟΤΕΛΕΣΜΑΤΑ </span> -->
+									</div>
+									<div class="route_final_option">
+										<a href="#" class="roll" id="step_3_save">
+											<span data-title="ΑΠΟΘΗΚΕΥΣΗ"> ΑΠΟΘΗΚΕΥΣΗ </span>
+										</a> 
+										<!-- <span class="hover_link " id="step_3_save">ΑΠΟΘΗΚΕΥΣΗ </span> -->
+									</div>
+									<div class="route_final_option"> 
+										<a href="#" class="roll" id="step_3_send">
+											<span data-title="ΑΠΟΣΤΟΛΗ"> ΑΠΟΣΤΟΛΗ </span>
+										</a> 
+										<!-- <span class="hover_link " id="step_3_send">ΑΠΟΣΤΟΛΗ</span> -->
+									</div>
+									<div class="route_final_option"> 
+										<a href="#" class="roll" id="step_3_new_route">
+											<span data-title="ΝΕΑ ΔΙΑΔΡΟΜΗ"> ΝΕΑ ΔΙΑΔΡΟΜΗ </span>
+										</a> 
+										<!-- <span class="hover_link " id="step_3_new_route">ΝΕΑ ΔΙΑΔΡΟΜΗ</span> -->
+									</div>
+									
+								</div>
+								<!-- <div id="main_route_div">
+									<center> <h4><b> ΑΠΟΤΕΛΕΣΜΑΤΑ ΔΙΑΔΡΟΜΗΣ:</b></h4></center>
+									<div id="step3_main_content"> </div>
+								</div> -->
+								<div id="saved_routes_div">
+									<center> <h4><b> ΟΙ ΔΙΑΔΡΟΜΕΣ ΜΟΥ:</b></h4></center>
+									<div id="saved_routes_menu_empty">
+										<center><span> Δεν έχετε ακόμα αποθηκευμένες διαδρομές </span></center> 
+									</div>
+									<div id="saved_routes_div_content"> 
+										
+										<div id="google_api_route"> </div>
+										<div id="saved_routes_menu"> </div>
+										<div id="dijkstra_google_btns">
+											<a hrer="#" class="roll" id="dijkstra_btn">
+												<span data-title="Διαδρομή i-Mobi"> Διαδρομή i-Mobi </span>
+											</a>
+											<a href="#" class="roll" id="google_btn">
+												<span data-title="Διαδρομή Google"> Διαδρομή Google </span>
+											</a>
+										</div><br><br>
+										<div id="current_route_div">
+											<center> <h4><b id="route_title"> ΑΠΟΤΕΛΕΣΜΑΤΑ ΔΙΑΔΡΟΜΗΣ i-Mobi </b></h4></center>
+											<div id="current_route"> </div>	<!-- Google route-->
+											<div id="dijkstra_route_container">
+												<div id="route_time_length_div">
+													<div id="route_total_length"></div>
+													<div id="route_total_time"></div>
+													<div id='mode_icon'></div>
+												</div>
+												<div id="dijkstra_route"> </div> 
+											</div>
+										</div>
+										
+										
+									</div>
+								</div>
+								<div id="dijkstra_saved_routes"></div>
+
+								<div id="send_a_route_div">
+									<center> <h4><b> ΑΠΟΣΤΟΛΗ <span id="route_to_send"></span></b></h4>
+										<div id="send_a_route_content"> 					
+											<label> Email:</label>
+											<input name="email" id="email" type="email" placeholder="email....." requried />
+											<button class="button_2" id="send_result_btn"> Αποστολή </button>
+										</div>
+									</center>
+								</div>
+							</div>
+							<center><button class="menu-button button_2" type="button">Κλείσιμο Μενού</button></center>
+						</ul>
+						<!-- /gn-scroller -->
+					</div>
+				</nav>
+			</li>
+			<li><a href="http://imobivolos.uth.gr/website/" target="blank"><span>Εργο Ι-mobi</span></a></li>
+			<li><a href="https://docs.google.com/forms/d/1cELXzkq3cSAwJZ1y9Ll1MXjb0siF2evtfRiU10YP4IQ/viewform" target="_blank">Αξιολογηση</a></li>
+			<li><a class="help-button" href="javascript:void(0);" onclick="javascript:introJs().start(); $('#platform_id').hide();">Βοηθεια</a></li>
+			<li id="other_options_btn_li">
+				<img id="other_options_btn" src="img/more_icon.png" height="20" width="25">
+			</li>
+		</ul>
+
+		</div><!-- /container -->
+		
+      </div>
+
+		<!--<div id="language">
+    		<a href="#" class="language" id="english">EN</a> | <a href="#" class="language" id="greek">GR</a>
+    	</div>-->
+
+		<div id="platform_id">
+			<a href="#" class="close_box" id="close_div">Κλείσιμο </a>
+			<div style="font-family: Yanone; padding-top:7px; text-align:justify; text-justify:inter-word; font-weight:bold; padding:10px;" align="left">
+				<p>
+					Το έργο αφορά τη δημιουργία ενός "Ευφυούς συστήματος διαχείρισης αστικής κινητικότητας για τη βελτίωση του αστικού περιβάλλοντος στο Πολεοδομικό Συγκρότημα του Βόλου".
+				</p>
+				<p>
+					Xρηματοδοτείται απο την <a href="http://ee.uth.gr/" target="blank">Επιτροπή Ερευνών του Πανεπιστημίου Θεσσαλίας</a> και αποσκοπεί στην εξυγίανση της αστικής κινητικότητας και την αναβάθμιση του κυκλοφοριακού τοπίου της πόλης του Βόλου με την δημιουργία κατάλληλης ηλεκτρονικής πλατφόρμας ενημέρωσης μετακινούμενων (portal) προωθώντας τις βιώσιμες επιλογές μετακίνησης των πολιτών, σύμφωνα με τις προσωπικές τους ανάγκες.
+				</p>
+				<p>
+					Μέσα από i-mobi-VOLOS, ο μετακινούμενος, τόσο ο κάτοικος όσο και ο επισκέπτης, θα έχει τη δυνατότητα να πληροφορείται σε πραγματικό χρόνο συμβάντων και να επιλέγει τη βέλτιστη για αυτόν (από άποψη χρόνου ή κόστους) και οικολογικότερη (βάση εκπομπών αέριων ρύπων) διαδρομή. Σε περίπτωση που η μετακίνηση μπορεί ή απαιτεί για την
+					πραγματοποίηση της συνδυασμό περισσότερων του ενός μεταφορικού μέσου, θα παρέχονται πληροφορίες για τα σημεία μετεπιβίβασης, τους χρόνους, τις διαθέσιμες επιλογές συνδυασμού μέσων και τα χαρακτηριστικά τους.
+				</p>
+				<p>
+					Για περισσότερες λεπτομέρειες πατήστε <a href="https://sites.google.com/site/imobilityvolos/" target="blank" style="color: lightgreen;">ΕΔΩ!</a>
+				</p>
+			</div>
+		</div>
+		<div id="platform_id2">
+			<a href="#" class="close_box" id="close_div2">Κλείσιμο </a>
+			<div style="font-family: Yanone; padding-top:7px; text-align:justify; text-justify:inter-word; font-weight:bold; padding:10px;" align="left">
+				<table border="0" style="display: inline-block;">
+					<tr>
+						<td>
+							<img src="img/dd-start.png"/> 
+						</td>
+						<td> Επιλεγμένη αφετηρία</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/dd-end.png"/> 
+						</td>
+						<td> Επιλεγμένος προορισμός</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/basketball.png"/> 
+						</td>
+						<td> Αθλητικές εγκαταστάσεις</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/communitycentre.png"/> 
+						</td>
+						<td> Δημοτικές υπηρεσίες</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/school.png"/> 
+						</td>
+						<td>Πρωτοβάθμια εκπαίδευση</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/school_2.png"/> 
+						</td>
+						<td> Δευτεροβάθμια εκπαίδευση</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/school_3.png"/> 
+						</td>
+						<td> Τριτοβάθμια εκπαίδευση</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/school_4.png"/> 
+						</td>
+						<td> Άλλες σχολές</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/icon-sevilla.png"/> 
+						</td>
+						<td> Θρησκευτικοί χώροι</td>
+					</tr>
+				</table>
+				<table border="0" style="display: inline-block;">
+					<tr>
+						<td>
+							<img src="img/mural.png"/> 
+						</td>
+						<td> Πολιτιστικοί χώροι</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/hotel_0star.png"/> 
+						</td>
+						<td> Ξενοδοχεία</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/taxi.png"/> 
+						</td>
+						<td> Πιάτσες ταξί</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/begrenzungspfahl_poller.png"/> 
+						</td>
+						<td> Τερματικοί σταθμοί</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/carrental.png"/> 
+						</td>
+						<td> Ενοικιάσεις αυτοκινήτων</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/parkinggarage.png"/> 
+						</td>
+						<td> Χώροι στάθμευσης</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/hospital-building.png"/> 
+						</td>
+						<td> Υγεία - Πρόνοια</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="img/other_marker.png"/> 
+						</td>
+						<td> Στάσεις γραμμών λεωφορείου</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div id="platform_id4">
+			<a href="#" class="close_box" id="close_div4">Κλείσιμο </a>
+			<div style="font-family: Yanone; padding-top:7px; text-align:justify; text-justify:inter-word; font-weight:bold; padding:10px;" align="left">
+				
+			</div>
+		</div>
+
+	</body>
+	
+	<script src="js/classie.js"></script>
+	<script src="js/gnmenu.js"></script>
+	<script type="text/javascript" src="js/home.js" ></script>
+	<script src="js/modernizr.custom.js"></script>
+	<script src="js/intro.js"></script>
+	
+
+	<!-- UserVoice JavaScript SDK (only needed once on a page) -->
+	<script>(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/iTGmkqhweAIeH1yCpnhHBg.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})()</script>
+	<!-- A tab to launch the Classic Widget -->
+	<script>
+		UserVoice = window.UserVoice || [];
+		UserVoice.push(['showTab', 'classic_widget', {
+		  mode: 'support',
+		  primary_color: '#cc6d00',
+		  link_color: '#007dbf',
+		  support_tab_name: 'Επικοινωνήστε μαζί μας',
+		  feedback_tab_name: 'Πείτε μας τη γνώμη / ιδέα σας',
+		  tab_label: 'Επικοινωνία',
+		  tab_color: '#cc7700',
+		  tab_position: 'middle-right',
+		  tab_inverted: false
+		}]);
+		$("#close_div").click(function(){
+			$("#platform_id").fadeOut(900);
+			return false;
+		});
+		function show_project_id() {
+			$("#platform_id").fadeIn(900);
+			$("#platform_id2").fadeOut(900);
+			$("#platform_id4").fadeOut(900);
+		}
+		$("#close_div2").click(function(){
+			$("#platform_id2").fadeOut(900);
+			return false;
+		});
+		function show_symbols() {
+			$("#platform_id2").fadeIn(900);
+			$("#platform_id").fadeOut(900);
+			$("#platform_id4").fadeOut(900);
+		}
+		$("#close_div4").click(function(){
+			$("#platform_id4").fadeOut(900);
+			return false;
+		});
+		$("#platform_id").hide();
+		$("#platform_id2").hide();
+		$("#platform_id4").hide();
+</script>
+
+
+</html>
